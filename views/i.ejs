@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xxx的个人主页-- 班级说说</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <style>
+        a img{
+            width: 100px;
+            border-radius: 50%;
+        }
+        .main{
+            border-top:1px solid #654;
+        }
+        .main .item{
+            padding:20px 5px;
+            border-bottom:1px solid orange;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs%>
+<div class="jumbotron">
+    <div class="container">
+        <a href=""><img src="/avatar/<%=avatar%>" alt=""></a> <h1><%=user%>的主页</h1>
+        <div class="main">
+            <%if(allShuoshuo.length<1){%>
+                <h1>用户未发布说说</h1>
+            <%} else {%>
+            <%for(var i=0;i<allShuoshuo.length;i++){%>
+            <div class="item">
+                <h3><%=allShuoshuo[i].title%></h3>
+                <p>作者: <code><%=allShuoshuo[i].username%></code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布时间: <code><%=allShuoshuo[i].wtime%></code></p>
+                <article><%=allShuoshuo[i].content%></article>
+            </div>
+            <%} }%>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

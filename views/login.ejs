@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录页面-- 班级说说</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+</head>
+<body>
+<% include header.ejs%>
+<div class="jumbotron">
+    <div class="container">
+        <!--中间注册窗口-->
+        <div class="center-block">
+            <h3>已有账号?马上登录!</h3>
+            <form action="">
+                <!--<p class="h3 pull-right">已有账号注册?马上登录!</p>-->
+                <div class="form-group  col-md-8">
+                    <label for="">用户名:</label>
+                    <input type="text" class="form-control" placeholder="请输入您的用户名" id="user">
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="">密码:</label>
+                    <input type="password" class="form-control" placeholder="这里是您的密码输入框!!!" id="pwd">
+                    <br>
+                    <button class="btn btn-primary btn-lg" type="button" id="login">登录</button>
+                </div>
+
+            </form>
+            <div class="alert alert-warning alert-dismissible col-md-8" role="alert" id="err" style="display:none">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="text-center"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+   $('#login').click(function(){
+       //ajax登录校验
+       $.post("/dologin",{
+           "username":$('#user').val(),
+           "password":$('#pwd').val()
+       },function(result){
+           if(result==-1){
+               alert("用户名不存在");
+               $('#err').fadeIn(800);
+               $('#err h3').html('用户名不在!请重试')
+           }else if(result==0){
+               alert("密码错误");
+               $('#err').fadeIn(800);
+               $('#err h3').html('密码错误!!请重新尝试登录')
+           }else{
+               alert("登录成功,马上进入首页!");
+               window.location="/";
+           }
+       })
+   })
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+/*顶部导航栏颜色*/
+.navbar{
+    background:mediumpurple;
+}
+.navbar ul li a{
+    color:white!important;
+}
+.navbar ul .active a{
+    background-color:rebeccapurple!important;
+}
+/*设置说说头像*/
+.item .media img{
+    width: 100px;
+    height:100px;
+}
+.item .media{
+    margin:20px 0;
+}

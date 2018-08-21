@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>全部成员-- 班级说说</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <style>
+        a img{
+            width: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs%>
+<div class="jumbotron">
+    <div class="container">
+        <div class="main">
+            <%for(var i=0;i<suoyouchengyuan.length;i++) {%>
+            <div class="item col-md-4 col-sm-6 col-xs-12">
+                <a href="/i/<%=suoyouchengyuan[i].user%>"><img src="/avatar/<%=suoyouchengyuan[i].avatar || "1.png" %>" alt=""></a>
+                <h3 ><%=suoyouchengyuan[i].user%></h3>
+            </div>
+            <%}%>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

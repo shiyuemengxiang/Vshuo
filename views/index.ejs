@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页--班级说说</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/underscore_noConflict.js"></script>
+    <style>
+        a{
+            display:inline;
+        }
+        a img{
+            width: 100px;
+            height:100px;
+            border-radius:50%;
+        }
+        .item{
+            height:180px;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs%>
+<div class="jumbotron">
+    <div class="container">
+        <% if(login==1){%>
+        <div class="left col-sm-4">
+            <a href="/setavatar">
+                <img src="/avatar/<%=avatar%>" alt="" id="avatar">
+            </a>
+            <h1>欢迎回来!</h1>
+            <p>亲爱的用户:<%=username%>,欢迎使用班级说说!尽情的享受互动吧!</p>
+        </div>
+        <!--右侧登录-->
+        <div class="right col-sm-8 ">
+                <input type="text" placeholder="请输入标题" class="form-control" style="margin-bottom: 20px" id="title">
+                <textarea name=""  cols="80" rows="6" class="col-md-12 form-control" id="content" placeholder="请输入说说内容" style="margin-bottom: 20px"></textarea>
+            <button type="button" class="btn-success btn " id="fabu" style="margin-bottom: 20px">发表说说</button>
+        </div>
+        <%} else{%>
+        <!--左侧-->
+        <div class="left col-sm-6">
+            <h1>欢迎!</h1>
+            <p>班级说说,我们的学习学习交流园地,我们的家园需要你的注册与加入!</p>
+            <p><a class="btn btn-success btn-lg" href="/register" role="button">注册</a></p>
+        </div>
+        <!--右侧登录-->
+        <div class="right col-sm-6 ">
+            <h3>已有账号?马上登录!</h3>
+            <form action="">
+                <!--<p class="h3 pull-right">已有账号注册?马上登录!</p>-->
+                <div class="form-group  col-md-8">
+                    <label for="">用户名:</label>
+                    <input type="text" class="form-control" required placeholder="请输入您的用户名" id="user">
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="">密码:</label>
+                    <input type="password" class="form-control" required placeholder="这里是您的密码输入框!!!" id="pwd">
+                    <br>
+                    <button class="btn btn-primary btn-lg" id="login">登录</button>
+                </div>
+            </form>
+        </div>
+        <%}%>
+
+    </div>
+</div>
+<!--显示评论区域-->
+<section>
+    <div class="container">
+        <div class="main">
+
+        </div>
+    </div>
+    <div class="container text-center">
+        <ul class="pagination ">
+
+        </ul>
+    </div>
+
+</section>
+<!--分页-->
+<script>
+    $.get("/allCount",function(result){
+        //页码数(向上取整)
+        var pagecount=Math.ceil(parseInt(result)/12);
+        for (var i=0;i<pagecount;i++){
+            $('.pagination').append("<li><a>"+(i+1)+"</a> </li>")
+        }
+        //默认显示第一页
+        $('.pagination li').eq(0).addClass('active');
+        //监听点击页码
+        $('.pagination li').click(function(){
+            var page=$(this).index();
+            getPage(page);
+            $(this).addClass('active').siblings('li').removeClass('active')
+        })
+    })
+</script>
+<script type="script/template" id="quanbushuoshuo">
+    <div class="item col-md-4 col-sm-6 col-xs-12">
+        <div class="media">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object" src="/avatar/{{=avatar}}" alt="...">
+                </a>
+            </div>
+            <div class="media-body">
+                <p>{{=username}} 于{{=wtime}} 发表了: {{=title }}</p>
+                <h4 class="media-heading text-warning">{{=title}}</h4>
+                <article>{{=content}}</article>
+                <a class="btn btn-default">查询详解</a>
+            </div>
+        </div>
+    </div>
+    <!--假数据-->
+</script>
+<script>
+    //首页账号登陆
+    $('#login').click(function(){
+        //ajax登录校验
+        $.post("/dologin",{
+            "username":$('#user').val(),
+            "password":$('#pwd').val()
+        },function(result){
+            if(result==-1){
+                alert("用户名不存在");
+                $('#err').fadeIn(800);
+                $('#err h3').html('用户名不在!请重试')
+            }else if(result==0){
+                alert("密码错误");
+                $('#err').fadeIn(800);
+                $('#err h3').html('密码错误!!请重新尝试登录')
+            }else{
+                alert("登录成功,马上进入首页!");
+                window.location="/";
+            }
+        })
+    })
+    //登陆后发布说说
+    $('#fabu').click(function(){
+        //ajax登录校验
+        $.post("/post",{
+            "title":$('#title').val(),
+            "content":$('#content').val(),
+        },function(result){
+            console.log(result)
+            if(result==-1){
+                alert("失败，请重试！或者联系网站管理员");
+            }else{
+                alert("发布成功");
+            }
+        })
+    })
+    //列出说说
+    var tpl=$('#quanbushuoshuo').html();//得到模板
+    var compiled = _.template(tpl);//tpl为刚才得到的封装模板
+    getPage(0)
+    function getPage(page) {
+        //清空上一次请求
+        $('.main').html("");
+        $.ajax({
+            "url":"/api?page="+page,
+            "type":"get",
+            "success":function(result){
+                console.log(result)
+                //迭代器
+                iterator(0);
+                function iterator(i){
+                    if (i==result.length){
+                        return;
+                    }
+                    $.get("/info?user="+result[i].username,function(data){
+                        result[i].avatar= data.avatar || "1.png";
+                        console.log(data)
+                        var mbstring=compiled(result[i])
+                        $('.main').append(mbstring)
+                        iterator(i+1)
+
+                    })
+                }
+
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

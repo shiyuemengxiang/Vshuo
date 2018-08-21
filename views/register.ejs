@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册页面--班级说说</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <style>
+        #err,#success{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs%>
+<div class="jumbotron">
+    <div class="container">
+        <!--中间注册窗口-->
+        <div class="center-block">
+            <h3>还没有账号?马上注册一个!</h3>
+            <form action="">
+                <!--<p class="h3 pull-right">已有账号注册?马上登录!</p>-->
+                <div class="form-group  col-md-8">
+                    <label for="">用户名:</label>
+                    <input type="text" class="form-control" placeholder="请输入您的用户名" id="username">
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="">密码:</label>
+                    <input type="password" class="form-control" placeholder="这里是您的密码输入框!!!" id="pwd">
+                    <label for="">确认密码:</label>
+                    <input type="password" class="form-control" placeholder="把上面的密码在输入一遍" id="pwd2">
+
+                </div>
+                <div class="form-group col-md-8">
+                    <input type="checkbox" id="xieyi" checked >同意并遵守用户协议
+                    <br>
+                    <button class="btn btn-primary btn-lg" id="zc" type="button">注册</button>
+
+                </div>
+
+
+            </form>
+            <div class="alert alert-warning alert-dismissible col-md-8" role="alert" id="err">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="text-center">用户名重复!请重试</h3>
+            </div>
+            <div class="alert alert-success alert-dismissible col-md-8 " role="alert" id="success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="text-center">注册成功!</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#zc').click(function(){
+        if($('#username').val()||$('#pwd').val()){
+            if($('#pwd').val()==$('#pwd2').val()){
+                //ajax请求处理
+                $.post("/doreg",{
+                    "username":$("#username").val(),
+                    "password":$('#pwd').val()
+                },function(result){
+                    if(result==-1){
+                        alert("服务器异常请联系网站管理员");
+                        return;
+                    }else if(result==-2){
+                        console.log(-2)
+                        alert("用户名重复请重试");
+                        $('#err').fadeIn(800);
+                        return;
+                    }else if(result==1){
+                        console.log(1)
+                        $('#success').fadeIn(800);
+                        alert("注册成功!马上进入登录页面");
+                        window.location="/";
+                    }
+                })
+            }else{
+                alert("两次输入密码不一致")
+            }
+        }else{
+            alert("用户名或密码不能为空")
+        }
+
+    })
+</script>
+</body>
+</html>

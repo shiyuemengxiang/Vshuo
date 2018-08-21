@@ -1,0 +1,23 @@
+{
+  "name": "vshuo",
+  "version": "1.0.0",
+  "description": "班级说说,nodejs实现demo,实现多用户说说发表,用户注册登录退出等功能",
+  "main": "app.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "gm": "^1.23.1",
+    "install": "^0.12.1",
+    "mongodb": "^3.1.1",
+    "session": "^0.1.0",
+    "silly-datetime": "^0.1.2",
+    "formidable": "^1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "十月梦想",
+  "license": "ISC"
+}
